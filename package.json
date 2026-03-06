@@ -1,0 +1,52 @@
+{
+  "name": "prompt-library",
+  "version": "1.0.0",
+  "description": "A clean, open-source desktop app to organize and manage your AI prompts. Built with Electron.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build": "electron-builder --win --mac"
+  },
+  "keywords": [
+    "prompt",
+    "library",
+    "ai",
+    "chatgpt",
+    "electron",
+    "desktop",
+    "clipboard",
+    "organizer"
+  ],
+  "author": "Leon",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "dependencies": {
+    "electron-store": "^8.2.0"
+  },
+  "build": {
+    "appId": "com.promptlibrary.app",
+    "productName": "Prompt Library",
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**/*",
+      "build-resources/**/*"
+    ],
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.productivity"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "directories": {
+      "buildResources": "build-resources",
+      "output": "dist"
+    }
+  }
+}
