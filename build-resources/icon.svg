@@ -1,11 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <!-- Minimal document icon: rounded, clean, no noise -->
-  <rect x="128" y="72" width="256" height="368" rx="40" ry="40" fill="#4A90D9" opacity="0.12"/>
-  <rect x="128" y="72" width="256" height="368" rx="40" ry="40" fill="none" stroke="#4A90D9" stroke-width="16" stroke-linejoin="round"/>
-  <!-- Three simple text lines -->
-  <line x1="192" y1="220" x2="320" y2="220" stroke="#4A90D9" stroke-width="14" stroke-linecap="round"/>
-  <line x1="192" y1="272" x2="296" y2="272" stroke="#4A90D9" stroke-width="14" stroke-linecap="round"/>
-  <line x1="192" y1="324" x2="264" y2="324" stroke="#4A90D9" stroke-width="14" stroke-linecap="round"/>
-  <!-- Minimal sparkle dot -->
-  <circle cx="364" cy="112" r="16" fill="#4A90D9"/>
+  <!-- Soft minimal document icon with AI sparkle -->
+  <!-- Document body - soft rounded -->
+  <rect x="128" y="88" width="240" height="336" rx="36" ry="36" fill="#e8e8ec" stroke="#c0c0c8" stroke-width="10" stroke-linejoin="round"/>
+  <!-- Text lines - very soft -->
+  <line x1="192" y1="220" x2="308" y2="220" stroke="#b0b0b8" stroke-width="10" stroke-linecap="round"/>
+  <line x1="192" y1="268" x2="280" y2="268" stroke="#b0b0b8" stroke-width="10" stroke-linecap="round"/>
+  <line x1="192" y1="316" x2="252" y2="316" stroke="#b0b0b8" stroke-width="10" stroke-linecap="round"/>
+  <!-- AI sparkle star -->
+  <path d="M370,120 L378,98 L386,120 L408,128 L386,136 L378,158 L370,136 L348,128 Z" fill="#a0a0aa"/>
+  <path d="M400,170 L404,158 L408,170 L420,174 L408,178 L404,190 L400,178 L388,174 Z" fill="#b8b8c0"/>
 </svg>
