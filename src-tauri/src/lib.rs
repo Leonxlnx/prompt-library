@@ -483,23 +483,6 @@ pub fn run() {
                 image_dir,
             });
 
-            // System tray click handler
-            #[cfg(desktop)]
-            {
-                use tauri::tray::TrayIconEvent;
-                if let Some(tray) = app.tray_by_id("main") {
-                    tray.on_tray_icon_event(|tray, event| {
-                        if let TrayIconEvent::Click { .. } = event {
-                            let app = tray.app_handle();
-                            if let Some(window) = app.get_webview_window("main") {
-                                let _ = window.show();
-                                let _ = window.set_focus();
-                            }
-                        }
-                    });
-                }
-            }
-
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![

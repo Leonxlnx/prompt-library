@@ -21,12 +21,6 @@
                 "center": true
             }
         ],
-        "trayIcon": {
-            "id": "main",
-            "iconPath": "icons/icon.png",
-            "iconAsTemplate": false,
-            "tooltip": "Prompt Library"
-        },
         "security": {
             "csp": "default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' asset: http://asset.localhost data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src ipc: http://ipc.localhost"
         }
@@ -42,26 +36,6 @@
             "nsis": {
                 "installMode": "currentUser"
             }
-        }
-    },
-    "plugins": {
-        "clipboard-manager": {
-            "all": true
-        },
-        "dialog": {
-            "all": true
-        },
-        "fs": {
-            "scope": {
-                "allow": [
-                    "$APPDATA/**",
-                    "$RESOURCE/**",
-                    "$HOME/Desktop/**"
-                ]
-            }
-        },
-        "shell": {
-            "open": true
         }
     }
 }
