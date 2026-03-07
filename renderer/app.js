@@ -2,7 +2,18 @@
    Prompt Library – Application Logic (Tauri v2)
    ═══════════════════════════════════════════════════════════════ */
 
-const { invoke } = window.__TAURI__.core;
+async function invoke(cmd, args) {
+    if (window.__TAURI__ && window.__TAURI__.core) {
+        return window.__TAURI__.core.invoke(cmd, args);
+    }
+    // Retry after a short delay if Tauri isn't ready yet
+    await new Promise(resolve => setTimeout(resolve, 100));
+    if (window.__TAURI__ && window.__TAURI__.core) {
+        return window.__TAURI__.core.invoke(cmd, args);
+    }
+    console.error('Tauri API not available');
+    return null;
+}
 
 // ─── State ─────────────────────────────────────────────────────
 let folders = [];

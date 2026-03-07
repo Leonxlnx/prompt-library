@@ -13,8 +13,8 @@
 
 <body>
   <!-- ─── Title Bar ─── -->
-  <header class="titlebar" id="titlebar">
-    <div class="titlebar-drag">
+  <header class="titlebar" id="titlebar" data-tauri-drag-region>
+    <div class="titlebar-drag" data-tauri-drag-region>
       <div class="titlebar-brand">
         <svg class="titlebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round">
@@ -230,7 +230,7 @@
     </button>
   </div>
 
-  <script src="app.js"></script>
+  <script src="app.js" defer></script>
 </body>
 
 </html>

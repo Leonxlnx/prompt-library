@@ -323,7 +323,7 @@ fn get_image_path(state: State<'_, AppState>, filename: String) -> String {
 }
 
 #[tauri::command]
-async fn select_images(
+fn select_images(
     state: State<'_, AppState>,
     app: AppHandle,
 ) -> Result<Vec<ImageResult>, String> {
@@ -455,9 +455,7 @@ fn window_maximize(app: AppHandle) {
 
 #[tauri::command]
 fn window_close(app: AppHandle) {
-    if let Some(window) = app.get_webview_window("main") {
-        let _ = window.hide();
-    }
+    app.exit(0);
 }
 
 // ─── App Setup ──────────────────────────────────────────────────

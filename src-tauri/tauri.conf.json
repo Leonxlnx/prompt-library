@@ -4,14 +4,14 @@
     "version": "1.0.0",
     "identifier": "com.promptlibrary.app",
     "build": {
-        "frontendDist": "../renderer",
-        "devUrl": "http://localhost:1420"
+        "frontendDist": "../renderer"
     },
     "app": {
         "withGlobalTauri": true,
         "windows": [
             {
                 "title": "Prompt Library",
+                "label": "main",
                 "width": 1100,
                 "height": 750,
                 "minWidth": 800,
@@ -22,12 +22,13 @@
             }
         ],
         "trayIcon": {
+            "id": "main",
             "iconPath": "icons/icon.png",
             "iconAsTemplate": false,
             "tooltip": "Prompt Library"
         },
         "security": {
-            "csp": "default-src 'self'; img-src 'self' asset: http://asset.localhost data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com"
+            "csp": "default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' asset: http://asset.localhost data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src ipc: http://ipc.localhost"
         }
     },
     "bundle": {
