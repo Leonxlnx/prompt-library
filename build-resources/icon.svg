@@ -1,37 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <defs>
-    <linearGradient id="doc" x1="0.2" y1="0" x2="0.8" y2="1">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="100%" stop-color="#dbeafe"/>
-    </linearGradient>
-    <linearGradient id="docStroke" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#93b8e8"/>
-      <stop offset="100%" stop-color="#4A7FBF"/>
-    </linearGradient>
-    <filter id="shadow" x="-15%" y="-10%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="6" stdDeviation="16" flood-color="#1a3a6e" flood-opacity="0.35"/>
-    </filter>
-    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="6" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-  </defs>
-  <!-- Document icon (centered, scaled up) -->
-  <g filter="shadow" transform="translate(256,260) scale(1.6)">
-    <path d="M-60,-100 L20,-100 L60,-60 L60,100 L-60,100 Z" fill="url(#doc)" stroke="url(#docStroke)" stroke-width="3"/>
-    <path d="M20,-100 L20,-60 L60,-60 Z" fill="#a8cef8" opacity="0.7"/>
-    <path d="M20,-100 L20,-60 L60,-60" fill="none" stroke="url(#docStroke)" stroke-width="3" stroke-linejoin="round"/>
-    <!-- Text lines -->
-    <line x1="-36" y1="-40" x2="36" y2="-40" stroke="#4A90D9" stroke-width="6" stroke-linecap="round" opacity="0.5"/>
-    <line x1="-36" y1="-12" x2="28" y2="-12" stroke="#4A90D9" stroke-width="6" stroke-linecap="round" opacity="0.4"/>
-    <line x1="-36" y1="16" x2="36" y2="16" stroke="#4A90D9" stroke-width="6" stroke-linecap="round" opacity="0.35"/>
-    <line x1="-36" y1="44" x2="20" y2="44" stroke="#4A90D9" stroke-width="6" stroke-linecap="round" opacity="0.3"/>
-  </g>
-  <!-- Sparkle accents -->
-  <g filter="glow" transform="translate(390, 105)">
-    <path d="M0,-22 L5,-5 L22,0 L5,5 L0,22 L-5,5 L-22,0 L-5,-5 Z" fill="#5BA0E9" opacity="0.9"/>
-  </g>
-  <g transform="translate(420, 155)">
-    <path d="M0,-12 L3,-3 L12,0 L3,3 L0,12 L-3,3 L-12,0 L-3,-3 Z" fill="#5BA0E9" opacity="0.6"/>
-  </g>
+  <!-- Minimal document icon: rounded, clean, no noise -->
+  <rect x="128" y="72" width="256" height="368" rx="40" ry="40" fill="#4A90D9" opacity="0.12"/>
+  <rect x="128" y="72" width="256" height="368" rx="40" ry="40" fill="none" stroke="#4A90D9" stroke-width="16" stroke-linejoin="round"/>
+  <!-- Three simple text lines -->
+  <line x1="192" y1="220" x2="320" y2="220" stroke="#4A90D9" stroke-width="14" stroke-linecap="round"/>
+  <line x1="192" y1="272" x2="296" y2="272" stroke="#4A90D9" stroke-width="14" stroke-linecap="round"/>
+  <line x1="192" y1="324" x2="264" y2="324" stroke="#4A90D9" stroke-width="14" stroke-linecap="round"/>
+  <!-- Minimal sparkle dot -->
+  <circle cx="364" cy="112" r="16" fill="#4A90D9"/>
 </svg>
