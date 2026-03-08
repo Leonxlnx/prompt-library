@@ -498,7 +498,7 @@ let recordedShortcut = '';
 $('#settingsBtn').addEventListener('click', async () => {
     const settings = await invoke('get_settings');
     if (settings) {
-        shortcutDisplay.textContent = settings.shortcut || 'CmdOrCtrl+Shift+S';
+        shortcutDisplay.textContent = settings.shortcut || 'CommandOrControl+Shift+S';
     }
     settingsOverlay.classList.add('active');
 });
@@ -551,7 +551,7 @@ document.addEventListener('keydown', (e) => {
 
     // Build the shortcut string in Tauri format
     const parts = [];
-    if (e.ctrlKey || e.metaKey) parts.push('CmdOrCtrl');
+    if (e.ctrlKey || e.metaKey) parts.push('CommandOrControl');
     if (e.altKey) parts.push('Alt');
     if (e.shiftKey) parts.push('Shift');
 
