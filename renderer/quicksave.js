@@ -1,22 +1,8 @@
 /* ═══════════════════════════════════════════════════════════════
-   Quick Save – Compact prompt saver
-   Supports both Electron (window.api) and Tauri (window.__TAURI__)
+   Quick Save – Compact prompt saver (Tauri v2)
    ═══════════════════════════════════════════════════════════════ */
 
 async function invoke(cmd, args) {
-    // ─── Electron path ─────────────────────────────────────────
-    if (window.api) {
-        const a = args || {};
-        switch (cmd) {
-            case 'get_folders':          return window.api.getFolders();
-            case 'get_settings':         { const theme = await window.api.getTheme(); return { theme: theme || 'dark' }; }
-            case 'create_prompt':        return window.api.createPrompt(a.folderId, a.name, a.text, a.tags, a.images);
-            case 'close_quicksave':      return window.api.close();
-            default:                     console.warn('QS: Unknown command:', cmd); return null;
-        }
-    }
-
-    // ─── Tauri path ────────────────────────────────────────────
     if (window.__TAURI__ && window.__TAURI__.core) {
         return window.__TAURI__.core.invoke(cmd, args);
     }
@@ -24,8 +10,7 @@ async function invoke(cmd, args) {
     if (window.__TAURI__ && window.__TAURI__.core) {
         return window.__TAURI__.core.invoke(cmd, args);
     }
-
-    console.error('No API bridge available');
+    console.error('Tauri API not available');
     return null;
 }
 

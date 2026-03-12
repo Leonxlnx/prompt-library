@@ -1,46 +1,17 @@
 /* ═══════════════════════════════════════════════════════════════
-   Prompt Library – Application Logic
-   Supports both Electron (window.api) and Tauri (window.__TAURI__)
+   Prompt Library – Application Logic (Tauri v2)
    ═══════════════════════════════════════════════════════════════ */
 
 async function invoke(cmd, args) {
-    // ─── Electron path (window.api from preload.js) ────────────
-    if (window.api) {
-        const a = args || {};
-        switch (cmd) {
-            case 'get_folders':         return window.api.getFolders();
-            case 'create_folder':       return window.api.createFolder(a.name);
-            case 'rename_folder':       return window.api.renameFolder(a.id, a.name);
-            case 'delete_folder':       return window.api.deleteFolder(a.id);
-            case 'create_prompt':       return window.api.createPrompt(a.folderId, a.name, a.text, a.tags, a.images);
-            case 'update_prompt':       return window.api.updatePrompt(a.folderId, a.promptId, a.name, a.text, a.tags, a.images);
-            case 'delete_prompt':       return window.api.deletePrompt(a.folderId, a.promptId);
-            case 'move_prompt':         return window.api.movePrompt(a.fromFolderId, a.toFolderId, a.promptId);
-            case 'copy_to_clipboard':   return window.api.copyToClipboard(a.text);
-            case 'save_image':          return window.api.saveImage(a.dataUrl);
-            case 'select_images':       return window.api.selectImages();
-            case 'get_image_path':      return window.api.getImagePath(a.filename);
-            case 'read_clipboard_image': return window.api.readClipboardImage();
-            case 'get_settings':        { const theme = await window.api.getTheme(); return { theme: theme || 'dark' }; }
-            case 'set_theme':           return window.api.setTheme(a.theme);
-            case 'window_minimize':     return window.api.minimize();
-            case 'window_maximize':     return window.api.maximize();
-            case 'window_close':        return window.api.close();
-            case 'set_shortcut':        return null; // Not available in Electron
-            default:                    console.warn('Unknown command:', cmd); return null;
-        }
-    }
-
-    // ─── Tauri path ────────────────────────────────────────────
     if (window.__TAURI__ && window.__TAURI__.core) {
         return window.__TAURI__.core.invoke(cmd, args);
     }
+    // Retry after a short delay if Tauri isn't ready yet
     await new Promise(resolve => setTimeout(resolve, 100));
     if (window.__TAURI__ && window.__TAURI__.core) {
         return window.__TAURI__.core.invoke(cmd, args);
     }
-
-    console.error('No API bridge available (neither Electron nor Tauri)');
+    console.error('Tauri API not available');
     return null;
 }
 
