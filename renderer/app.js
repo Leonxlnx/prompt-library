@@ -21,6 +21,7 @@ let activeFolderId = null;
 let editingPromptId = null;
 let contextFolderId = null;
 let modalImages = []; // { filename, dataUrl }
+let currentSort = 'newest';
 
 // ─── DOM References ────────────────────────────────────────────
 const $ = (sel) => document.querySelector(sel);
@@ -57,6 +58,10 @@ const confirmTitle = $('#confirmTitle');
 const confirmDesc = $('#confirmDesc');
 const confirmOk = $('#confirmOk');
 const confirmCancel = $('#confirmCancel');
+const sortMenu = $('#sortMenu');
+const sortBtn = $('#sortBtn');
+const charCount = $('#charCount');
+const charCounter = $('#charCounter');
 
 // ─── Helpers ───────────────────────────────────────────────────
 function escapeHtml(str) {
@@ -202,6 +207,9 @@ function renderPrompts() {
 
     folderBadge.textContent = prompts.length;
 
+    // Apply sort
+    prompts = sortPrompts(prompts, currentSort);
+
     if (prompts.length === 0) {
         promptGrid.style.display = 'none';
         emptyState.style.display = 'flex';
@@ -340,6 +348,29 @@ function findPrompt(promptId) {
     return folder.prompts.find(p => p.id === promptId);
 }
 
+// ─── Sort Logic ────────────────────────────────────────────────
+function sortPrompts(prompts, mode) {
+    const sorted = [...prompts];
+    switch (mode) {
+        case 'newest':
+            sorted.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+            break;
+        case 'oldest':
+            sorted.sort((a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0));
+            break;
+        case 'name-asc':
+            sorted.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+        case 'name-desc':
+            sorted.sort((a, b) => b.name.localeCompare(a.name));
+            break;
+        case 'updated':
+            sorted.sort((a, b) => new Date(b.updated_at || b.created_at || 0) - new Date(a.updated_at || a.created_at || 0));
+            break;
+    }
+    return sorted;
+}
+
 // ─── Image Preview Management ──────────────────────────────────
 function renderImagePreviews() {
     imagePreviewList.innerHTML = modalImages.map((img, idx) => `
@@ -400,6 +431,7 @@ function openPromptModal(promptId = null) {
     }
 
     renderImagePreviews();
+    updateCharCounter();
     modalOverlay.classList.add('active');
     setTimeout(() => promptName.focus(), 100);
 }
@@ -522,6 +554,34 @@ document.addEventListener('paste', async (e) => {
     }
 });
 
+// ─── Character Counter ─────────────────────────────────────────
+function updateCharCounter() {
+    const len = promptText.value.length;
+    charCount.textContent = len.toLocaleString();
+    charCounter.classList.remove('warning', 'danger');
+    if (len > 8000) charCounter.classList.add('danger');
+    else if (len > 4000) charCounter.classList.add('warning');
+}
+
+promptText.addEventListener('input', updateCharCounter);
+
+// ─── Sort Dropdown ─────────────────────────────────────────────
+sortBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    sortMenu.classList.toggle('visible');
+});
+
+sortMenu.querySelectorAll('.sort-option').forEach(opt => {
+    opt.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentSort = opt.dataset.sort;
+        sortMenu.querySelectorAll('.sort-option').forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        sortMenu.classList.remove('visible');
+        renderPrompts();
+    });
+});
+
 // ─── Event Listeners ───────────────────────────────────────────
 $('#addPromptBtn').addEventListener('click', () => openPromptModal());
 $('#addFolderBtn').addEventListener('click', () => openFolderModal());
@@ -567,6 +627,7 @@ $('#ctxDelete').addEventListener('click', async () => {
 
 document.addEventListener('click', () => {
     contextMenu.classList.remove('visible');
+    sortMenu.classList.remove('visible');
 });
 
 // Search

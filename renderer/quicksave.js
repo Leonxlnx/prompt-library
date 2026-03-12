@@ -23,6 +23,15 @@ const qsCancel = document.getElementById('qsCancel');
 const qsClose = document.getElementById('qsClose');
 const qsToast = document.getElementById('qsToast');
 
+// ─── Auto-Resize Textarea ──────────────────────────────────────
+function autoResize() {
+    qsText.style.height = 'auto';
+    const maxH = window.innerHeight * 0.55;
+    qsText.style.height = Math.min(qsText.scrollHeight, maxH) + 'px';
+}
+
+qsText.addEventListener('input', autoResize);
+
 // ─── Init ───────────────────────────────────────────────────────
 async function init() {
     // Load theme
@@ -37,6 +46,12 @@ async function init() {
         qsFolder.innerHTML = folders.map(f =>
             `<option value="${f.id}">${f.name} (${f.prompts.length})</option>`
         ).join('');
+
+        // Pre-select the most recently used folder
+        const lastFolderId = localStorage.getItem('qs_last_folder');
+        if (lastFolderId && folders.some(f => f.id === lastFolderId)) {
+            qsFolder.value = lastFolderId;
+        }
     } else {
         qsFolder.innerHTML = '<option value="">No folders</option>';
     }
@@ -62,6 +77,9 @@ async function savePrompt() {
         name = text.substring(0, 35).replace(/\n/g, ' ');
         if (text.length > 35) name += '…';
     }
+
+    // Remember the folder for next time
+    localStorage.setItem('qs_last_folder', folderId);
 
     await invoke('create_prompt', {
         folderId: folderId,

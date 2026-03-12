@@ -12,12 +12,12 @@
 - [x] Relative Datums-Anzeige ("vor 2h" statt fixes Datum)
 
 ## Update 2 · Productivity
-- [ ] Keyboard Shortcuts — `Ctrl+N` New Prompt, `Ctrl+F` Focus Search
-- [ ] Sort-Optionen: Name, Datum, Zuletzt bearbeitet
-- [ ] Search durchsucht auch Prompt-Text (nicht nur Name)
-- [ ] Character Counter im Textarea (Token-Limit Awareness)
-- [ ] Quick Save: Recent Folder vorausgewählt
-- [ ] Quick Save: Textarea Auto-Resize
+- [x] Keyboard Shortcuts — `Ctrl+N` New Prompt, `Ctrl+F` Focus Search
+- [x] Sort-Optionen: Name, Datum, Zuletzt bearbeitet
+- [x] Search durchsucht auch Prompt-Text (nicht nur Name)
+- [x] Character Counter im Textarea (Token-Limit Awareness)
+- [x] Quick Save: Recent Folder vorausgewählt
+- [x] Quick Save: Textarea Auto-Resize
 
 ## Update 3 · Organisation
 - [ ] Favoriten / Pinned Prompts (⭐ Star-Button)

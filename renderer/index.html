@@ -169,6 +169,25 @@
             </svg>
             <input type="text" class="search-input" id="searchInput" placeholder="Search prompts...">
           </div>
+          <div class="sort-dropdown" id="sortDropdown">
+            <button class="btn-icon sort-btn" id="sortBtn" title="Sort prompts">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round">
+                <line x1="4" y1="6" x2="16" y2="6" />
+                <line x1="4" y1="12" x2="12" y2="12" />
+                <line x1="4" y1="18" x2="8" y2="18" />
+                <polyline points="15 15 18 18 21 15" />
+                <line x1="18" y1="10" x2="18" y2="18" />
+              </svg>
+            </button>
+            <div class="sort-menu" id="sortMenu">
+              <button class="sort-option active" data-sort="newest">Newest first</button>
+              <button class="sort-option" data-sort="oldest">Oldest first</button>
+              <button class="sort-option" data-sort="name-asc">Name A → Z</button>
+              <button class="sort-option" data-sort="name-desc">Name Z → A</button>
+              <button class="sort-option" data-sort="updated">Recently edited</button>
+            </div>
+          </div>
           <button class="btn-primary" id="addPromptBtn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round">
@@ -215,6 +234,7 @@
 
           <label class="form-label">Prompt Text</label>
           <textarea class="form-textarea" id="promptText" placeholder="Enter your prompt here..." rows="6"></textarea>
+          <div class="char-counter" id="charCounter"><span id="charCount">0</span> characters</div>
 
           <label class="form-label">Tags <span class="label-hint">(comma separated)</span></label>
           <input type="text" class="form-input" id="promptTags" placeholder="e.g. coding, review, assistant">
