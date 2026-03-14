@@ -1938,3 +1938,135 @@ body {
 .char-counter.danger {
   color: var(--danger);
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   Update 3 · Organisation
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── Star / Favorite Button ─────────────────────────────────── */
+.star-btn {
+  color: var(--text-tertiary);
+  transition: color 0.2s, transform 0.2s;
+}
+
+.star-btn:hover {
+  color: #facc15;
+  transform: scale(1.15);
+}
+
+.star-btn.active {
+  color: #facc15;
+}
+
+.prompt-card.is-favorite {
+  box-shadow: inset 0 0 0 1px rgba(250, 204, 21, 0.15);
+}
+
+/* ─── Folder Color Dot ───────────────────────────────────────── */
+.folder-color-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-right: -4px;
+}
+
+/* ─── Card Color Stripe ──────────────────────────────────────── */
+.card-color-stripe {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.prompt-card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─── Drag & Drop States ─────────────────────────────────────── */
+.folder-item.dragging,
+.prompt-card.dragging {
+  opacity: 0.4;
+  transform: scale(0.97);
+}
+
+.folder-item.drag-over {
+  background: var(--accent-subtle);
+  box-shadow: inset 0 0 0 1.5px var(--accent);
+  border-radius: var(--radius-sm);
+}
+
+.prompt-card.drag-over {
+  box-shadow: inset 0 0 0 2px var(--accent);
+}
+
+[draggable="true"] {
+  cursor: grab;
+}
+
+[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+/* ─── Tag Overflow Badge ─────────────────────────────────────── */
+.tag-more {
+  background: var(--bg-hover);
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+/* ─── Context Menu Color Picker ──────────────────────────────── */
+.context-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 4px 8px;
+}
+
+.context-colors {
+  padding: 6px 12px;
+}
+
+.context-color-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  margin-bottom: 6px;
+  font-family: var(--font);
+}
+
+.context-color-swatches {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.color-swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+  padding: 0;
+}
+
+.color-swatch:hover {
+  transform: scale(1.2);
+  border-color: var(--text-primary);
+}
+
+.color-swatch-clear {
+  background: var(--bg-hover) !important;
+  color: var(--text-tertiary);
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  border: 1.5px dashed var(--border);
+}

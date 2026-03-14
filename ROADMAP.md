@@ -20,12 +20,12 @@
 - [x] Quick Save: Textarea Auto-Resize
 
 ## Update 3 · Organisation
-- [ ] Favoriten / Pinned Prompts (⭐ Star-Button)
-- [ ] Folder Farben (Color Picker pro Folder)
-- [ ] Farbstreifen am linken Rand der Cards (Folder-Farbe)
-- [ ] Drag & Drop — Prompts zwischen Folders verschieben
-- [ ] Drag & Drop — Folder Reihenfolge ändern
-- [ ] Tag-Limit auf Cards: Max 3 + "+2 more" Badge
+- [x] Favoriten / Pinned Prompts (⭐ Star-Button)
+- [x] Folder Farben (Color Picker pro Folder)
+- [x] Farbstreifen am linken Rand der Cards (Folder-Farbe)
+- [x] Drag & Drop — Prompts zwischen Folders verschieben
+- [x] Drag & Drop — Folder Reihenfolge ändern
+- [x] Tag-Limit auf Cards: Max 3 + "+2 more" Badge
 
 ## Update 4 · Design Overhaul
 - [ ] Custom App Logo (statt generisches Datei-Icon)

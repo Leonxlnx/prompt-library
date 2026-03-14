@@ -161,18 +161,24 @@ function renderFolders() {
     const totalPrompts = folders.reduce((sum, f) => sum + f.prompts.length, 0);
     promptCount.textContent = `${totalPrompts} prompt${totalPrompts !== 1 ? 's' : ''}`;
 
-    folderList.innerHTML = folders.map(folder => `
-    <div class="folder-item ${folder.id === activeFolderId ? 'active' : ''}"
-         data-id="${folder.id}">
-      <svg class="folder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-      </svg>
-      <span class="folder-name">${escapeHtml(folder.name)}</span>
-      <span class="folder-count">${folder.prompts.length}</span>
-    </div>
-  `).join('');
+    folderList.innerHTML = folders.map(folder => {
+        const colorDot = folder.color
+            ? `<span class="folder-color-dot" style="background:${folder.color}"></span>`
+            : '';
+        return `
+        <div class="folder-item ${folder.id === activeFolderId ? 'active' : ''}"
+             data-id="${folder.id}" draggable="true">
+          ${colorDot}
+          <svg class="folder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span class="folder-name">${escapeHtml(folder.name)}</span>
+          <span class="folder-count">${folder.prompts.length}</span>
+        </div>
+      `;
+    }).join('');
 
-    // Click handlers
+    // Click + context menu handlers
     folderList.querySelectorAll('.folder-item').forEach(el => {
         el.addEventListener('click', () => {
             activeFolderId = el.dataset.id;
@@ -185,6 +191,57 @@ function renderFolders() {
             contextMenu.style.left = e.clientX + 'px';
             contextMenu.style.top = e.clientY + 'px';
             contextMenu.classList.add('visible');
+        });
+
+        // ── Folder drag & drop reorder ──
+        el.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/folder-id', el.dataset.id);
+            e.dataTransfer.effectAllowed = 'move';
+            el.classList.add('dragging');
+        });
+        el.addEventListener('dragend', () => el.classList.remove('dragging'));
+        el.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            // Only show drop indicator for folder reorder (not prompt drops)
+            if (e.dataTransfer.types.includes('text/folder-id')) {
+                el.classList.add('drag-over');
+            }
+            // Accept prompt drops too
+            if (e.dataTransfer.types.includes('text/prompt-id')) {
+                el.classList.add('drag-over');
+            }
+        });
+        el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
+        el.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            el.classList.remove('drag-over');
+
+            // Handle prompt drop (move between folders)
+            const promptData = e.dataTransfer.getData('text/prompt-id');
+            if (promptData) {
+                const { fromFolderId, promptId } = JSON.parse(promptData);
+                const toFolderId = el.dataset.id;
+                if (fromFolderId !== toFolderId) {
+                    folders = await invoke('move_prompt', { fromFolderId, toFolderId, promptId });
+                    renderFolders();
+                    renderPrompts();
+                    showToast('Prompt moved!');
+                }
+                return;
+            }
+
+            // Handle folder reorder
+            const draggedId = e.dataTransfer.getData('text/folder-id');
+            if (!draggedId || draggedId === el.dataset.id) return;
+            const ids = folders.map(f => f.id);
+            const fromIdx = ids.indexOf(draggedId);
+            const toIdx = ids.indexOf(el.dataset.id);
+            if (fromIdx === -1 || toIdx === -1) return;
+            ids.splice(fromIdx, 1);
+            ids.splice(toIdx, 0, draggedId);
+            folders = await invoke('reorder_folders', { folderIds: ids });
+            renderFolders();
+            renderPrompts();
         });
     });
 }
@@ -220,10 +277,15 @@ function renderPrompts() {
     emptyState.style.display = 'none';
 
     promptGrid.innerHTML = prompts.map((p, i) => {
-        const tagsHtml = (p.tags || [])
-            .filter(t => t.trim())
+        const allTags = (p.tags || []).filter(t => t.trim());
+        const visibleTags = allTags.slice(0, 3);
+        const extraCount = allTags.length - 3;
+        let tagsHtml = visibleTags
             .map(t => `<span class="tag">${escapeHtml(t.trim())}</span>`)
             .join('');
+        if (extraCount > 0) {
+            tagsHtml += `<span class="tag tag-more">+${extraCount} more</span>`;
+        }
 
         const imagesHtml = (p.images && p.images.length > 0)
             ? `<div class="card-images">${p.images.map((img, idx) => {
@@ -236,11 +298,24 @@ function renderPrompts() {
             ? `<span class="card-date">${formatDate(p.updated_at || p.created_at)}</span>`
             : '';
 
+        const folder = folders.find(f => f.id === activeFolderId);
+        const colorStripe = (folder && folder.color)
+            ? `<div class="card-color-stripe" style="background:${folder.color}"></div>`
+            : '';
+
+        const starClass = p.favorite ? 'star-btn active' : 'star-btn';
+
         return `
-      <div class="prompt-card" data-id="${p.id}" style="animation-delay: ${i * 0.06}s">
+      <div class="prompt-card${p.favorite ? ' is-favorite' : ''}" data-id="${p.id}" style="animation-delay: ${i * 0.06}s" draggable="true">
+        ${colorStripe}
         <div class="card-header">
           <span class="card-name">${escapeHtml(p.name)}</span>
           <div class="card-actions">
+            <button class="card-btn ${starClass}" data-id="${p.id}" title="${p.favorite ? 'Unpin' : 'Pin'}">
+              <svg viewBox="0 0 24 24" fill="${p.favorite ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            </button>
             <button class="card-btn edit-btn" data-id="${p.id}" title="Edit">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -290,6 +365,15 @@ function renderPrompts() {
         });
     });
 
+    // Star / Favorite toggle
+    promptGrid.querySelectorAll('.star-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            folders = await invoke('toggle_favorite', { folderId: activeFolderId, promptId: btn.dataset.id });
+            renderPrompts();
+        });
+    });
+
     promptGrid.querySelectorAll('.edit-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -328,9 +412,18 @@ function renderPrompts() {
     promptGrid.querySelectorAll('.prompt-card').forEach(card => {
         card.addEventListener('dblclick', (e) => {
             // Don't trigger if clicking buttons or images
-            if (e.target.closest('.card-btn, .card-copy-main, .card-image-thumb')) return;
+            if (e.target.closest('.card-btn, .card-copy-main, .card-image-thumb, .star-btn')) return;
             openPromptModal(card.dataset.id);
         });
+
+        // ── Prompt drag & drop (move between folders) ──
+        card.addEventListener('dragstart', (e) => {
+            const data = JSON.stringify({ fromFolderId: activeFolderId, promptId: card.dataset.id });
+            e.dataTransfer.setData('text/prompt-id', data);
+            e.dataTransfer.effectAllowed = 'move';
+            card.classList.add('dragging');
+        });
+        card.addEventListener('dragend', () => card.classList.remove('dragging'));
     });
 
     // Card image click → lightbox
@@ -628,6 +721,19 @@ $('#ctxDelete').addEventListener('click', async () => {
 document.addEventListener('click', () => {
     contextMenu.classList.remove('visible');
     sortMenu.classList.remove('visible');
+});
+
+// Folder color swatches in context menu
+document.querySelectorAll('#ctxColors .color-swatch').forEach(swatch => {
+    swatch.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (!contextFolderId) return;
+        const color = swatch.dataset.color;
+        folders = await invoke('set_folder_color', { id: contextFolderId, color });
+        contextMenu.classList.remove('visible');
+        renderFolders();
+        renderPrompts();
+    });
 });
 
 // Search

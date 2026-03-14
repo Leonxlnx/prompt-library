@@ -19,6 +19,8 @@ pub struct Prompt {
     pub images: Vec<String>,
     #[serde(rename = "createdAt")]
     pub created_at: String,
+    #[serde(default)]
+    pub favorite: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -26,6 +28,8 @@ pub struct Folder {
     pub id: String,
     pub name: String,
     pub prompts: Vec<Prompt>,
+    #[serde(default)]
+    pub color: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -47,6 +51,7 @@ impl Default for AppData {
                 Folder {
                     id: "default".into(),
                     name: "General".into(),
+                    color: String::new(),
                     prompts: vec![
                         Prompt {
                             id: "welcome".into(),
@@ -55,6 +60,7 @@ impl Default for AppData {
                             tags: vec!["general".into(), "starter".into()],
                             images: vec![],
                             created_at: chrono_now(),
+                            favorite: false,
                         },
                         Prompt {
                             id: "code-review".into(),
@@ -63,12 +69,14 @@ impl Default for AppData {
                             tags: vec!["coding".into(), "review".into()],
                             images: vec![],
                             created_at: chrono_now(),
+                            favorite: false,
                         },
                     ],
                 },
                 Folder {
                     id: "creative".into(),
                     name: "Creative Writing".into(),
+                    color: String::new(),
                     prompts: vec![Prompt {
                         id: "storyteller".into(),
                         name: "Story Generator".into(),
@@ -76,6 +84,7 @@ impl Default for AppData {
                         tags: vec!["creative".into(), "writing".into()],
                         images: vec![],
                         created_at: chrono_now(),
+                        favorite: false,
                     }],
                 },
             ],
@@ -158,6 +167,7 @@ fn create_folder(state: State<'_, AppState>, name: String) -> Vec<Folder> {
         id: gen_id(),
         name,
         prompts: vec![],
+        color: String::new(),
     });
     drop(data);
     state.save();
@@ -204,6 +214,7 @@ fn create_prompt(
             tags,
             images,
             created_at: now_iso(),
+            favorite: false,
         });
     }
     drop(data);
@@ -513,6 +524,60 @@ fn open_quicksave_window(app: &AppHandle) {
     .build();
 }
 
+// ─── Organisation Commands ──────────────────────────────────────
+
+#[tauri::command]
+fn toggle_favorite(
+    state: State<'_, AppState>,
+    folder_id: String,
+    prompt_id: String,
+) -> Vec<Folder> {
+    let mut data = state.data.lock().unwrap();
+    if let Some(folder) = data.folders.iter_mut().find(|f| f.id == folder_id) {
+        if let Some(prompt) = folder.prompts.iter_mut().find(|p| p.id == prompt_id) {
+            prompt.favorite = !prompt.favorite;
+        }
+    }
+    drop(data);
+    state.save();
+    state.data.lock().unwrap().folders.clone()
+}
+
+#[tauri::command]
+fn set_folder_color(
+    state: State<'_, AppState>,
+    id: String,
+    color: String,
+) -> Vec<Folder> {
+    let mut data = state.data.lock().unwrap();
+    if let Some(folder) = data.folders.iter_mut().find(|f| f.id == id) {
+        folder.color = color;
+    }
+    drop(data);
+    state.save();
+    state.data.lock().unwrap().folders.clone()
+}
+
+#[tauri::command]
+fn reorder_folders(
+    state: State<'_, AppState>,
+    folder_ids: Vec<String>,
+) -> Vec<Folder> {
+    let mut data = state.data.lock().unwrap();
+    let mut reordered: Vec<Folder> = Vec::new();
+    for id in &folder_ids {
+        if let Some(pos) = data.folders.iter().position(|f| &f.id == id) {
+            reordered.push(data.folders.remove(pos));
+        }
+    }
+    // Append any remaining folders not in the list
+    reordered.append(&mut data.folders);
+    data.folders = reordered;
+    drop(data);
+    state.save();
+    state.data.lock().unwrap().folders.clone()
+}
+
 // ─── Window Controls ────────────────────────────────────────────
 
 
@@ -652,6 +717,9 @@ pub fn run() {
             update_prompt,
             delete_prompt,
             move_prompt,
+            toggle_favorite,
+            set_folder_color,
+            reorder_folders,
             save_image,
             get_image_path,
             select_images,
