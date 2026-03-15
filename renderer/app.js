@@ -195,34 +195,30 @@ function renderFolders() {
 
         // ── Folder drag & drop reorder ──
         el.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text/folder-id', el.dataset.id);
+            const payload = JSON.stringify({ type: 'folder', folderId: el.dataset.id });
+            e.dataTransfer.setData('text/plain', payload);
             e.dataTransfer.effectAllowed = 'move';
             el.classList.add('dragging');
         });
         el.addEventListener('dragend', () => el.classList.remove('dragging'));
         el.addEventListener('dragover', (e) => {
             e.preventDefault();
-            // Only show drop indicator for folder reorder (not prompt drops)
-            if (e.dataTransfer.types.includes('text/folder-id')) {
-                el.classList.add('drag-over');
-            }
-            // Accept prompt drops too
-            if (e.dataTransfer.types.includes('text/prompt-id')) {
-                el.classList.add('drag-over');
-            }
+            e.dataTransfer.dropEffect = 'move';
+            el.classList.add('drag-over');
         });
         el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
         el.addEventListener('drop', async (e) => {
             e.preventDefault();
             el.classList.remove('drag-over');
 
+            let payload;
+            try { payload = JSON.parse(e.dataTransfer.getData('text/plain')); } catch { return; }
+
             // Handle prompt drop (move between folders)
-            const promptData = e.dataTransfer.getData('text/prompt-id');
-            if (promptData) {
-                const { fromFolderId, promptId } = JSON.parse(promptData);
+            if (payload.type === 'prompt') {
                 const toFolderId = el.dataset.id;
-                if (fromFolderId !== toFolderId) {
-                    folders = await invoke('move_prompt', { fromFolderId, toFolderId, promptId });
+                if (payload.fromFolderId !== toFolderId) {
+                    folders = await invoke('move_prompt', { fromFolderId: payload.fromFolderId, toFolderId, promptId: payload.promptId });
                     renderFolders();
                     renderPrompts();
                     showToast('Prompt moved!');
@@ -231,17 +227,18 @@ function renderFolders() {
             }
 
             // Handle folder reorder
-            const draggedId = e.dataTransfer.getData('text/folder-id');
-            if (!draggedId || draggedId === el.dataset.id) return;
-            const ids = folders.map(f => f.id);
-            const fromIdx = ids.indexOf(draggedId);
-            const toIdx = ids.indexOf(el.dataset.id);
-            if (fromIdx === -1 || toIdx === -1) return;
-            ids.splice(fromIdx, 1);
-            ids.splice(toIdx, 0, draggedId);
-            folders = await invoke('reorder_folders', { folderIds: ids });
-            renderFolders();
-            renderPrompts();
+            if (payload.type === 'folder') {
+                if (!payload.folderId || payload.folderId === el.dataset.id) return;
+                const ids = folders.map(f => f.id);
+                const fromIdx = ids.indexOf(payload.folderId);
+                const toIdx = ids.indexOf(el.dataset.id);
+                if (fromIdx === -1 || toIdx === -1) return;
+                ids.splice(fromIdx, 1);
+                ids.splice(toIdx, 0, payload.folderId);
+                folders = await invoke('reorder_folders', { folderIds: ids });
+                renderFolders();
+                renderPrompts();
+            }
         });
     });
 }
@@ -418,8 +415,8 @@ function renderPrompts() {
 
         // ── Prompt drag & drop (move between folders) ──
         card.addEventListener('dragstart', (e) => {
-            const data = JSON.stringify({ fromFolderId: activeFolderId, promptId: card.dataset.id });
-            e.dataTransfer.setData('text/prompt-id', data);
+            const payload = JSON.stringify({ type: 'prompt', fromFolderId: activeFolderId, promptId: card.dataset.id });
+            e.dataTransfer.setData('text/plain', payload);
             e.dataTransfer.effectAllowed = 'move';
             card.classList.add('dragging');
         });

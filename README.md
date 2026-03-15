@@ -1,142 +1,151 @@
 <p align="center">
-  <img src="build-resources/icon.png" alt="Prompt Library" width="120" height="120" style="border-radius: 22px;">
+  <img src="src-tauri/icons/icon.png" width="100" alt="Prompt Library Logo" />
 </p>
 
 <h1 align="center">Prompt Library</h1>
 
 <p align="center">
-  A clean, open-source desktop app to organize and manage your AI prompts.<br>
-  Built with Electron. Available on Windows and macOS.
+  <strong>A fast, beautiful desktop app to organize, search, and instantly copy your AI prompts.</strong>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS-blue" alt="Platform">
-  <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
-  <img src="https://img.shields.io/badge/electron-33-blueviolet" alt="Electron">
+  Built with <a href="https://v2.tauri.app">Tauri v2</a> · Rust backend · Vanilla JS frontend
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/platform-Windows%20%7C%20macOS-blue?style=flat-square" alt="Platform" />
+  <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License" />
+  <img src="https://img.shields.io/badge/tauri-v2-orange?style=flat-square" alt="Tauri v2" />
 </p>
 
 ---
 
-## What It Does
+## ✨ Features
 
-Prompt Library gives you a single place to store, categorize, and copy your AI prompts. No cloud, no accounts — everything stays on your machine.
+- **Folder Organization** — Group prompts into folders with custom colors
+- **One-Click Copy** — Instantly copy any prompt to your clipboard
+- **Quick Save** — Global shortcut (`Ctrl+Shift+S`) to save prompts from anywhere
+- **Favorites** — Pin your most-used prompts with a ⭐ star
+- **Drag & Drop** — Move prompts between folders, reorder folders by dragging
+- **Image Attachments** — Attach reference images to prompts (paste, drag, or browse)
+- **Smart Search** — Search across prompt names, text, and tags
+- **Sort Options** — Sort by name, date created, or recently edited
+- **Tag System** — Tag prompts for quick filtering (max 3 shown per card)
+- **Dark / Light Theme** — Toggle with one click
+- **Keyboard Shortcuts** — `Ctrl+N` new prompt, `Ctrl+F` search, `Ctrl+B` toggle sidebar
+- **Character Counter** — Token-limit awareness with 4K/8K warnings
+- **Tiny Footprint** — ~5 MB installer (thanks to Tauri)
 
-- **Folders** to organize prompts by topic
-- **One-click copy** to clipboard
-- **Image attachments** on prompts (upload, drag & drop, or `Ctrl+V` to paste)
-- **Search** across all prompts instantly
-- **Dark and Light mode** with smooth transitions
-- **System tray** — the app stays running in the background
-- **Desktop shortcut** created automatically on first launch
+## 📸 Screenshots
 
-## Screenshots
+<!-- Add screenshots here -->
+<!-- ![Main View](screenshots/main.png) -->
 
-> *Run `npm start` and see for yourself — the app looks best on your own machine.*
+## 🚀 Installation
 
-## Getting Started
+### Download Pre-built Installer
 
-### Prerequisites
+Go to the [Releases](../../releases) page and download the installer for your platform:
 
-- [Node.js](https://nodejs.org/) (v18 or newer)
-- [Git](https://git-scm.com/)
+| Platform | File |
+|----------|------|
+| **Windows** | `Prompt.Library_x.x.x_x64-setup.exe` |
+| **macOS** | `Prompt.Library_x.x.x_aarch64.dmg` or `_x64.dmg` |
 
-### Installation
+Run the installer and you're good to go.
+
+### Build from Source
+
+#### Prerequisites
+
+| Tool | Version | Install |
+|------|---------|---------|
+| **Rust** | latest stable | [rustup.rs](https://rustup.rs) |
+| **Node.js** | 18+ | [nodejs.org](https://nodejs.org) |
+| **Tauri CLI** | 2.x | `cargo install tauri-cli` |
+
+**macOS additional:** Xcode Command Line Tools (`xcode-select --install`)
+
+**Windows additional:** [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/) with "Desktop development with C++" workload, and [WebView2](https://developer.microsoft.com/en-us/microsoft-edge/webview2/) (pre-installed on Windows 11).
+
+#### Steps
 
 ```bash
 # Clone the repository
-git clone https://github.com/YourUsername/prompt-library.git
+git clone https://github.com/Leonxlnx/prompt-library.git
 cd prompt-library
 
-# Install dependencies
+# Install frontend dependencies
 npm install
 
-# Start the app
-npm start
+# Run in development mode (hot-reload)
+cargo tauri dev
+
+# Build production installer
+cargo tauri build
 ```
 
-That's it. The app opens immediately.
+The installer will be in `src-tauri/target/release/bundle/`:
+- **Windows:** `nsis/Prompt Library_x.x.x_x64-setup.exe`
+- **macOS:** `dmg/Prompt Library_x.x.x_aarch64.dmg`
 
-### Building Installers
-
-To create distributable installers:
-
-```bash
-# Windows (.exe installer)
-npm run build:win
-
-# macOS (.dmg)
-npm run build:mac
-
-# Both
-npm run build
-```
-
-Output files are saved to the `dist/` folder.
-
-## Project Structure
+## 🏗️ Project Structure
 
 ```
 prompt-library/
-├── main.js                  # Electron main process
-├── preload.js               # Secure bridge between main and renderer
-├── package.json
-├── build-resources/
-│   ├── icon.png             # App icon (PNG)
-│   ├── icon.ico             # App icon (Windows)
-│   └── icon.svg             # App icon (source)
-└── renderer/
-    ├── index.html           # App layout
-    ├── styles.css           # Soft UI design system
-    └── app.js               # UI logic and state management
+├── renderer/            # Frontend (HTML, CSS, JS)
+│   ├── index.html       # Main window
+│   ├── styles.css       # All styles
+│   ├── app.js           # Main app logic
+│   ├── quicksave.html   # Quick save popup
+│   └── quicksave.js     # Quick save logic
+├── src-tauri/           # Rust backend
+│   ├── src/lib.rs       # Commands, data models, persistence
+│   ├── tauri.conf.json  # Tauri configuration
+│   └── Cargo.toml       # Rust dependencies
+├── ROADMAP.md           # Feature roadmap
+└── README.md            # This file
 ```
 
-## How It Works
+## 🔧 Tech Stack
 
-| Component         | Technology                              |
-|-------------------|-----------------------------------------|
-| Framework         | Electron 33                             |
-| Storage           | [electron-store](https://github.com/sindresorhus/electron-store) (JSON on disk) |
-| UI                | Vanilla HTML, CSS, JavaScript           |
-| Design            | Soft UI / Neumorphic with blue accent   |
-| Font              | [Inter](https://fonts.google.com/specimen/Inter) via Google Fonts |
+| Layer | Technology |
+|-------|-----------|
+| **Framework** | [Tauri v2](https://v2.tauri.app) |
+| **Backend** | Rust |
+| **Frontend** | Vanilla HTML/CSS/JS |
+| **Storage** | Local JSON file (`%APPDATA%` / `~/Library/Application Support`) |
+| **Font** | [Inter](https://fonts.google.com/specimen/Inter) (Google Fonts) |
 
-All prompt data is stored locally in your system's app data folder. No external services, no telemetry.
+## 📋 Roadmap
 
-## Features
+See [ROADMAP.md](ROADMAP.md) for the full feature roadmap.
 
-### Prompt Management
-- Create, edit, and delete prompts
-- Assign tags for quick filtering
-- Attach images (file upload, drag & drop, or paste from clipboard)
-- Click any image thumbnail to view it full-size
+**Completed:**
+- ✅ Update 1 · Core Polish
+- ✅ Update 2 · Productivity
+- ✅ Update 3 · Organisation
 
-### Organization
-- Create, rename, and delete folders
-- Prompts are grouped by folder
-- Real-time search by name, text, or tags
+**Planned:**
+- 🎨 Update 4 · Design Overhaul
+- ⚡ Update 5 · Power Features (template variables, export/import, history)
+- 🤖 Update 8 · AI Integration (prompt optimizer, auto-tagging)
+- ☁️ Update 9 · Sync & Cloud
 
-### Design
-- Soft UI aesthetic with neumorphic shadows
-- Full dark and light mode support
-- Smooth animations and micro-interactions
-- Responsive layout for different window sizes
+## 🤝 Contributing
 
-### System Integration
-- Minimizes to system tray on close
-- Click the tray icon to bring the app back
-- Desktop shortcut created on first launch (Windows)
-- Keyboard shortcuts: `Ctrl+N` (new prompt), `Ctrl+F` (search), `Ctrl+Enter` (save), `Esc` (close)
-
-## Contributing
-
-Contributions are welcome. Feel free to open an issue or submit a pull request.
+Contributions are welcome! Feel free to:
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -m 'Add your feature'`)
-4. Push to the branch (`git push origin feature/your-feature`)
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
+## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+## 👤 Author
+
+**Leon Lin** — [@Leonxlnx](https://github.com/Leonxlnx)
