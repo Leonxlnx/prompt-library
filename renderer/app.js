@@ -554,10 +554,13 @@ async function saveModal() {
             return;
         }
 
+        // modalImages can contain {dataUrl, filename} objects or plain strings
+        const imageStrings = modalImages.map(img => typeof img === 'string' ? img : (img.dataUrl || img));
+
         if (editingPromptId) {
-            folders = await invoke('update_prompt', { folderId: activeFolderId, promptId: editingPromptId, name, text, tags, images: modalImages });
+            folders = await invoke('update_prompt', { folderId: activeFolderId, promptId: editingPromptId, name, text, tags, images: imageStrings });
         } else {
-            folders = await invoke('create_prompt', { folderId: activeFolderId, name, text, tags, images: modalImages });
+            folders = await invoke('create_prompt', { folderId: activeFolderId, name, text, tags, images: imageStrings });
         }
     } else if (modalMode === 'folder') {
         const name = $('#folderName').value.trim();
