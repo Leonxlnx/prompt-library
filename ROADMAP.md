@@ -1,69 +1,69 @@
-# 🗺️ Prompt Library — Roadmap
+# Prompt Library — Roadmap
 
 ---
 
-## Update 1 · Core Polish
-- [x] Sidebar Collapse Button (ein-/ausklappen)
-- [x] Active Folder Indicator (Accent-Bar links statt nur Background)
-- [x] Confirmation Dialog beim Löschen von Prompts & Folders
-- [x] Double-Click to Edit auf Prompt Cards
-- [x] Staggered Card Animations (Karten erscheinen nacheinander)
-- [x] Delete-Animation (Card Shrink + Fade Out)
-- [x] Relative Datums-Anzeige ("vor 2h" statt fixes Datum)
+## Update 1 · Core Polish ✓
+- [x] Sidebar collapse button
+- [x] Active folder indicator (accent bar)
+- [x] Confirmation dialog for deletes
+- [x] Double-click to edit prompt cards
+- [x] Staggered card animations
+- [x] Delete animation (shrink + fade out)
+- [x] Relative date display ("2h ago" instead of fixed date)
 
-## Update 2 · Productivity
-- [x] Keyboard Shortcuts — `Ctrl+N` New Prompt, `Ctrl+F` Focus Search
-- [x] Sort-Optionen: Name, Datum, Zuletzt bearbeitet
-- [x] Search durchsucht auch Prompt-Text (nicht nur Name)
-- [x] Character Counter im Textarea (Token-Limit Awareness)
-- [x] Quick Save: Recent Folder vorausgewählt
-- [x] Quick Save: Textarea Auto-Resize
+## Update 2 · Productivity ✓
+- [x] Keyboard shortcuts — Ctrl+N, Ctrl+F, Ctrl+B
+- [x] Sort options: name, date, recently edited
+- [x] Search covers prompt text (not just name)
+- [x] Character counter in textarea (4K/8K warnings)
+- [x] Quick save: recent folder pre-selected
+- [x] Quick save: textarea auto-resize
 
-## Update 3 · Organisation
-- [x] Favoriten / Pinned Prompts (⭐ Star-Button)
-- [x] Folder Farben (Color Picker pro Folder)
-- [x] Farbstreifen am linken Rand der Cards (Folder-Farbe)
-- [x] Drag & Drop — Prompts zwischen Folders verschieben
-- [x] Drag & Drop — Folder Reihenfolge ändern
-- [x] Tag-Limit auf Cards: Max 3 + "+2 more" Badge
+## Update 3 · Organisation ✓
+- [x] Favorites / pinned prompts (star button)
+- [x] Folder colors (8-color picker in context menu)
+- [x] Color stripe on card left edge (folder color)
+- [x] Drag and drop: move prompts between folders
+- [x] Drag and drop: reorder folders
+- [x] Tag limit on cards: max 3 + "+N more" badge
 
 ## Update 4 · Design Overhaul
-- [ ] Custom App Logo (statt generisches Datei-Icon)
-- [ ] Titlebar Gradient (nicht komplett flat)
-- [ ] Settings Panel Redesign: Glassmorphism Backdrop
-- [ ] Modal Redesign: Blur-Background + Glass Border
-- [ ] Prompt Card Hover verfeinern (subtilerer Lift)
-- [ ] Bild-Thumbnails auf Cards wenn Bilder vorhanden
-- [ ] Empty State Illustrationen + Onboarding Tour
+- [ ] Custom app icon
+- [ ] Titlebar gradient
+- [ ] Settings panel redesign (glassmorphism)
+- [ ] Modal redesign (blur background, glass border)
+- [ ] Refined card hover effect
+- [ ] Image thumbnails on cards
+- [ ] Empty state illustrations + onboarding
 
 ## Update 5 · Power Features
-- [ ] Template Variables `{{VARIABLE}}` mit Ausfüll-Dialog beim Kopieren
-- [ ] Export / Import (Backup als `.json` oder `.zip`)
-- [ ] Prompt Versionen / History (letzte 5 Versionen)
-- [ ] Nutzungsstatistiken (Copy-Counter, "Most Used" Ansicht)
-- [ ] Bulk Select + Bulk Delete/Move
+- [ ] Template variables `{{VARIABLE}}` with fill-in dialog on copy
+- [ ] Export / import (backup as .json or .zip)
+- [ ] Prompt versions / history (last 5 edits)
+- [ ] Usage stats (copy counter, "most used" view)
+- [ ] Bulk select + bulk delete/move
 
-## Update 6 · Settings Expansion
-- [ ] Accent Color Picker (Custom Theme-Farbe)
-- [ ] Font Size Slider
-- [ ] Data Storage Location anzeigen
-- [ ] Reset to Defaults Button
-- [ ] About Section: Version, Links, Credits
+## Update 6 · Settings
+- [ ] Accent color picker (custom theme color)
+- [ ] Font size slider
+- [ ] Show data storage location
+- [ ] Reset to defaults
+- [ ] About section: version, links, credits
 
 ## Update 7 · Advanced
-- [ ] Prompt Chains (mehrere Prompts verketten)
-- [ ] Multi-Window / Pop-Out (Prompt in eigenem Fenster)
-- [ ] Smart Search mit Filter-Chips (Tags, Datum, Folder)
-- [ ] Fuzzy Search (Tippfehler-tolerant)
-- [ ] Clipboard Watcher (erkennt Prompt-artige Texte)
+- [ ] Prompt chains (link multiple prompts)
+- [ ] Multi-window / pop-out
+- [ ] Filter chips (tags, date, folder)
+- [ ] Fuzzy search (typo-tolerant)
+- [ ] Clipboard watcher
 
 ## Update 8 · AI Integration
-- [ ] AI Prompt Optimizer ("Optimize" Button)
-- [ ] Auto-Tagging (AI erkennt Keywords)
-- [ ] Diff-Ansicht: Original vs. Optimized
+- [ ] AI prompt optimizer
+- [ ] Auto-tagging
+- [ ] Diff view: original vs. optimized
 
-## Update 9 · Sync & Cloud
-- [ ] Cloud Sync (Firebase/Supabase)
-- [ ] Ende-zu-Ende Verschlüsselung
-- [ ] Offline-First mit Merge
-- [ ] Multi-Device Support
+## Update 9 · Sync
+- [ ] Cloud sync
+- [ ] End-to-end encryption
+- [ ] Offline-first with merge
+- [ ] Multi-device support
