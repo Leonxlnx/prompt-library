@@ -1,9 +1,6 @@
 # Dependencies
 node_modules/
 
-# Build output
-dist/
-
 # OS files
 .DS_Store
 Thumbs.db
@@ -15,8 +12,8 @@ desktop.ini
 *.swp
 *.swo
 
-# Electron
+# Logs
 *.log
 
-# Tauri
+# Tauri build output
 src-tauri/target/

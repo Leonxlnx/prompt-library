@@ -88,9 +88,12 @@ prompt-library/
 │   ├── quicksave.html
 │   └── quicksave.js
 ├── src-tauri/           # Rust backend
-│   ├── src/lib.rs
-│   ├── tauri.conf.json
+│   ├── src/lib.rs       # Core logic and commands
+│   ├── src/main.rs      # Entry point
+│   ├── tauri.conf.json  # App config
+│   ├── capabilities/    # Permission definitions
 │   └── Cargo.toml
+├── package.json
 ├── ROADMAP.md
 ├── LICENSE
 └── README.md

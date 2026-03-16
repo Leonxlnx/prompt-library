@@ -1,66 +1,23 @@
 {
   "name": "prompt-library",
   "version": "1.0.0",
-  "description": "A clean, open-source desktop app to organize and manage your AI prompts. Built with Electron.",
-  "main": "main.js",
+  "description": "A clean desktop app to organize and manage your AI prompts. Built with Tauri v2 and Rust.",
+  "private": true,
   "scripts": {
-    "start": "electron .",
-    "build:win": "electron-builder --win",
-    "build:mac": "electron-builder --mac",
-    "build": "electron-builder --win --mac"
+    "dev": "cargo tauri dev",
+    "build": "cargo tauri build",
+    "build:debug": "cargo tauri build --debug"
   },
   "keywords": [
     "prompt",
     "library",
     "ai",
-    "chatgpt",
-    "electron",
+    "tauri",
+    "rust",
     "desktop",
     "clipboard",
     "organizer"
   ],
   "author": "Leon",
-  "license": "MIT",
-  "devDependencies": {
-    "electron": "^33.0.0",
-    "electron-builder": "^25.1.8",
-    "png-to-ico": "^3.0.1",
-    "sharp": "^0.34.5"
-  },
-  "dependencies": {
-    "electron-store": "^8.2.0"
-  },
-  "build": {
-    "appId": "com.promptlibrary.app",
-    "productName": "Prompt Library",
-    "files": [
-      "main.js",
-      "preload.js",
-      "renderer/**/*",
-      "build-resources/**/*"
-    ],
-    "mac": {
-      "target": "dmg",
-      "category": "public.app-category.productivity"
-    },
-    "win": {
-      "target": "nsis",
-      "icon": "build-resources/icon.ico"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "perMachine": false,
-      "deleteAppDataOnUninstall": true,
-      "installerIcon": "build-resources/icon.ico",
-      "uninstallerIcon": "build-resources/icon.ico",
-      "installerHeaderIcon": "build-resources/icon.ico",
-      "shortcutName": "Prompt Library",
-      "guid": "com.promptlibrary.app"
-    },
-    "directories": {
-      "buildResources": "build-resources",
-      "output": "dist"
-    }
-  }
+  "license": "MIT"
 }
