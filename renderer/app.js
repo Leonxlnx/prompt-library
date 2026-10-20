@@ -60,6 +60,7 @@ let appSettings = {
     glass_blur: 14,
     background_visibility: 0.24,
     accent_color: '#79BFFF',
+    fit_cards_to_window: false,
 };
 let settingsDraft = null;
 let settingsDirty = false;
@@ -95,6 +96,7 @@ const lightboxClose = $('#lightboxClose');
 const sidebar = $('#sidebar');
 const mainContent = $('#mainContent');
 const appLayout = $('.app-layout');
+const fitCardsToWindowCheckbox = $('#fitCardsToWindow');
 const sidebarCollapseBtn = $('#sidebarCollapseBtn');
 const sidebarExpandBtn = $('#sidebarExpandBtn');
 const confirmOverlay = $('#confirmOverlay');
@@ -373,7 +375,13 @@ function collectGlassSettingsFromControls() {
         accent_color: sanitizeHexColor(accentColorPicker?.value, '#79BFFF'),
     });
 }
-
+// Unchecked (default) = cards keep a minimum height and the grid scrolls.
+// Checked = original behaviour: cards shrink to fit the window.
+function applyCardLayoutSetting(settings = appSettings) {
+    const fitCards = !!settings.fit_cards_to_window;
+    mainContent.classList.toggle('has-scrolling-cards', !fitCards);
+    if (fitCardsToWindowCheckbox) fitCardsToWindowCheckbox.checked = fitCards;
+}
 async function hydrateSettings(settings) {
     if (!settings) return;
     appSettings = { ...appSettings, ...settings };
@@ -384,6 +392,7 @@ async function hydrateSettings(settings) {
     }
 
     appSettings = applyGlassSettings(appSettings);
+    applyCardLayoutSetting(appSettings);
     await applyWorkspaceBackgrounds(appSettings);
 }
 
@@ -1160,6 +1169,7 @@ async function saveSettingsChanges() {
             backgroundVisibility: settingsDraft.background_visibility,
             accentColor: settingsDraft.accent_color,
             backgroundFilename: pendingWorkspaceBackground,
+            fitCardsToWindow: !!settingsDraft.fit_cards_to_window,
         };
 
         let settings = await invoke('set_appearance_settings', payload);
@@ -1274,6 +1284,13 @@ function previewGlassSettings() {
 });
 
 accentColorPicker?.addEventListener('input', previewGlassSettings);
+
+fitCardsToWindowCheckbox?.addEventListener('change', () => {
+    if (!settingsDraft) settingsDraft = { ...appSettings };
+    settingsDraft.fit_cards_to_window = fitCardsToWindowCheckbox.checked;
+    applyCardLayoutSetting(settingsDraft);
+    setSettingsDirty(true);
+});
 
 function stopRecording() {
     isRecording = false;

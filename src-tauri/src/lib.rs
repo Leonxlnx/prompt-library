@@ -57,6 +57,8 @@ pub struct AppData {
     pub background_visibility: f32,
     #[serde(default = "default_accent_color")]
     pub accent_color: String,
+    #[serde(default)]
+    pub fit_cards_to_window: bool,
 }
 
 fn default_shortcut() -> String {
@@ -156,6 +158,7 @@ impl Default for AppData {
             glass_blur: default_glass_blur(),
             background_visibility: default_background_visibility(),
             accent_color: default_accent_color(),
+            fit_cards_to_window: false,
         }
     }
 }
@@ -550,6 +553,7 @@ pub struct Settings {
     pub glass_blur: f32,
     pub background_visibility: f32,
     pub accent_color: String,
+    pub fit_cards_to_window: bool,
 }
 
 fn snapshot_settings(data: &AppData) -> Settings {
@@ -565,6 +569,7 @@ fn snapshot_settings(data: &AppData) -> Settings {
         glass_blur: data.glass_blur,
         background_visibility: data.background_visibility,
         accent_color: data.accent_color.clone(),
+        fit_cards_to_window: data.fit_cards_to_window,
     }
 }
 
@@ -651,6 +656,7 @@ fn set_appearance_settings(
     background_visibility: f32,
     accent_color: String,
     background_filename: String,
+    fit_cards_to_window: bool,
 ) -> Settings {
     let settings = {
         let mut data = state.data.lock().unwrap();
@@ -663,6 +669,7 @@ fn set_appearance_settings(
         data.accent_color = normalize_accent_color(&accent_color);
         data.main_background = background_filename.clone();
         data.sidebar_background = background_filename;
+        data.fit_cards_to_window = fit_cards_to_window;
         snapshot_settings(&data)
     };
     state.save();
