@@ -6669,3 +6669,36 @@ Final Settings + Shell Stability
     text-rendering: geometricPrecision;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   Prompt cards: keep a minimum height, scroll the grid instead of squashing
+   ═══════════════════════════════════════════════════════════════ */
+/* Toggled by the "Fit Cards to Window" setting (app.js → applyCardLayoutSetting) */
+.has-scrolling-cards .prompt-grid {
+  grid-auto-rows: max-content !important; /* rows size to their content, never shrunk to fit */
+  min-height: 0;
+}
+
+.has-scrolling-cards .prompt-card {
+  min-height: 220px; /* adjust to taste */
+}
+
+/* Settings: checkbox row */
+.settings-checkbox-row {
+  cursor: pointer;
+}
+
+.settings-checkbox-row .settings-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-checkbox-row input[type="checkbox"] {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
